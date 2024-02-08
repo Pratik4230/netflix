@@ -10,13 +10,5 @@
   return null;
 }
 
-export const checkValidName = (name) => {
 
-    const isNameValid = /\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+/.test(name);
-    
-    if(!isNameValid) return "name is not valid";
-    
-
-  return null;
-}
 
