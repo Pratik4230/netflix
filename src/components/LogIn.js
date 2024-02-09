@@ -1,6 +1,8 @@
 import { useRef, useState } from "react";
 import Header from "./Header";
-import {checkValidData,checkValidName} from "../utils/Validate";
+import {checkValidData} from "../utils/Validate";
+import {createUserWithEmailAndPassword ,signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../utils/firebase";
 
 const LogIn = () => {
 //   for show signin / signup  page
@@ -23,7 +25,41 @@ const handelButtonClick = () => {
 const massage = checkValidData(email.current.value , password.current.value);
 setErrorMassage(massage)
 // console.log(massage);
+
+if (massage) return ;
+
+if (!isSignIn) {
+    createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+  .then((userCredential) => {
+    // Signed up 
+    const user = userCredential.user;
+    console.log(user)
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    setErrorMassage(errorCode + " - " + errorMessage)
+  });
+}  
+
+if (isSignIn) {
+    signInWithEmailAndPassword(auth, email.current.value, password.current.value)
+    .then((userCredential) => {
+      // Signed in 
+      const user = userCredential.user;
+      console.log(user)
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setErrorMassage(errorCode + " - " + errorMessage)
+    }); 
 }
+
+}
+    
+
 
 // change signin/signup
 const toggleSignIn = () => {
